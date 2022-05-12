@@ -1,0 +1,9 @@
+#formWrapper {
+    /* border-color: #dc3545; */
+    border: 1px solid #dc3545;
+    background-color: rgba(0,0,0,.03);
+}
+
+.form-control.is-valid, .was-validated .form-control:valid {
+    background-image:none;
+}
