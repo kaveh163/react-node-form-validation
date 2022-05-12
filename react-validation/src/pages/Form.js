@@ -11,25 +11,26 @@ const reducer = (state, action) => {
   }
 };
 function Form() {
-  const [userInput, setUserInput] = useState("");
-  const [passInput, setPassInput] = useState("");
-  const [confirmInput, setConfirmInput] = useState("");
-  const [email, setEmail] = useState("");
+  // const [userInput, setUserInput] = useState("");
+  // const [passInput, setPassInput] = useState("");
+  // const [confirmInput, setConfirmInput] = useState("");
+  // const [email, setEmail] = useState("");
 
-  const [data, dispatch] = useReducer(reducer, initialValue);
+  // const [data, dispatch] = useReducer(reducer, initialValue);
+  const [data, setData] = useState(null);
   const [isEye, setIsEye] = useState(true);
   const spanElement = useRef();
   const passElement = useRef();
   const userElement = useRef();
   const confirmElement = useRef();
   const emailElement = useRef();
-  console.log("state");
+  // console.log("state");
   const handleEyeIcon = () => {
     // console.log('handleEye');
     // console.log(spanElement);
-    console.log("befor setEye");
+    // console.log("befor setEye");
     setIsEye(!isEye);
-    console.log("after setEye");
+    // console.log("after setEye");
     const iconElement = spanElement.current && spanElement.current.children[0];
     // iconElement.removeAttribute('icon')
     // console.log("passwordElement", passElement);
@@ -40,6 +41,20 @@ function Form() {
       passElement.current.setAttribute("type", "password");
     }
   };
+  function getPassData() {
+    console.log("inside getPassData");
+    let text = "";
+    if (data) {
+      data.errors.map((item, index) => {
+        if (item.param === "password") {
+          // passElement.current.value='';
+          console.log(item.msg);
+          text += `${item.msg}. `;
+          return "hi";
+        }
+      });
+    }
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Submit");
@@ -65,9 +80,14 @@ function Form() {
       },
     })
       .then((response) => response.json())
-      .then((json) => console.log(json));
+      .then((json) => {
+        console.log(json);
+        setData(json);
+
+        getPassData();
+      });
   };
-  console.log("return");
+  // console.log("return");
   return (
     <>
       <section className="row mt-2">
@@ -117,7 +137,15 @@ function Form() {
                   />
                 </span>
                 <div id="PasswordFeedback" className="invalid-feedback">
-                  Password must be minimum 8 characters.
+                  {data
+                    ? data.errors.map((item, index) => {
+                      if (item.param === "password") {
+                        passElement.current.value='';
+                        // console.log(item.msg);
+                        return `${item.msg}. `;
+                      }
+                    })
+                    : "Password must be minimum 8 characters."}
                 </div>
                 <div className="valid-feedback"></div>
               </div>
