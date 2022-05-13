@@ -80,11 +80,14 @@ function Form() {
       },
     })
       .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        setData(json);
-
-        getPassData();
+      .then((data) => {
+        console.log(data);
+        if(data.errors) {
+          setData(data);
+        } else {
+          window.location.href = data.url;
+        }
+        
       });
   };
   // console.log("return");
@@ -139,13 +142,15 @@ function Form() {
                 <div id="PasswordFeedback" className="invalid-feedback">
                   {data
                     ? data.errors.map((item, index) => {
-                      if (item.param === "password") {
-                        passElement.current.value='';
-                        // console.log(item.msg);
-                        return `${item.msg}. `;
-                      }
-                    })
-                    : "Password must be minimum 8 characters."}
+                        if (item.param === "password") {
+                          passElement.current.value = "";
+                          // console.log(item.msg);
+                          return `${item.msg}. `;
+                        } else {
+                          return "";
+                        }
+                      })
+                    : "Password must be minimum 8 characters. Password must include uppercase,lowercase letters, digits and symbols"}
                 </div>
                 <div className="valid-feedback"></div>
               </div>
@@ -163,7 +168,16 @@ function Form() {
                 required
               />
               <div className="invalid-feedback" id="ConfirmPasswordFeedback">
-                confirm password does not match password
+                {data
+                  ? data.errors.map((item, index) => {
+                      if (item.param === "confirmPass") {
+                        confirmElement.current.value = "";
+                        return `${item.msg}. `;
+                      } else {
+                        return "";
+                      }
+                    })
+                  : "password must match password"}
               </div>
               <div className="valid-feedback"></div>
             </div>
@@ -180,7 +194,16 @@ function Form() {
                 required
               />
               <div className="invalid-feedback" id="EmailFeedback">
-                email must be valid
+                {data
+                  ? data.errors.map((item, index) => {
+                      if (item.param === "email") {
+                        emailElement.current.value = "";
+                        return `${item.msg}. `;
+                      } else {
+                        return "";
+                      }
+                    })
+                  : "email must be valid"}
               </div>
               <div className="valid-feedback"></div>
             </div>

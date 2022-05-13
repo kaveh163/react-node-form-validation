@@ -29,7 +29,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<Form />} />
-       
+        <Route path="home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
