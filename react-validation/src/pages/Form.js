@@ -177,7 +177,7 @@ function Form() {
                         return "";
                       }
                     })
-                  : "password must match password"}
+                  : "confirm password must match password"}
               </div>
               <div className="valid-feedback"></div>
             </div>

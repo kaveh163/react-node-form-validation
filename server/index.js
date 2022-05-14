@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const { check, validationResult } = require("express-validator");
 
@@ -8,6 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static(path.resolve(__dirname, '../react-validation/build')));
+  app.get('/*', function (req, res) {
+    res.sendFile(path.resolve(__dirname, "../react-validation/build", "index.html"))
+  })
+}
+
 
 app.post(
   "/api",
@@ -53,6 +62,7 @@ app.post(
     return res.json({ url: "/home" });
   }
 );
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
